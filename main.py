@@ -15,7 +15,7 @@ def index():
 
 
 @app.route("/api/users", methods=["GET", "POST"])
-def get_users():
+def users():
     if request.method == "POST":
         # Create new User
         data = request.get_json()

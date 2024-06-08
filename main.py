@@ -1,11 +1,37 @@
-from flask import Flask
+from flask import jsonify, request, render_template
+from app import create_app
+from app import db
+from models import *
 
-app = Flask(__name__)
+app = create_app()
+
+with app.app_context():
+    db.create_all()
 
 
 @app.route("/")
 def index():
-    return "Hello World!"
+    return render_template('index.html', my_value=2, my_list=["Hehe", "huhu", "hoho"])
+
+
+@app.route("/api/users", methods=["GET", "POST"])
+def get_users():
+    if request.method == "POST":
+        # Create new User
+        data = request.get_json()
+        user = User(
+            email=data["email"],
+            name=data["name"],
+            password=data["password"],
+        )
+
+        db.session.add(user)
+        db.session.commit()
+
+        return jsonify({"message": "Successfully create new User", "data": user})
+
+    users = User.query.all()
+    return jsonify({"message": "Successfully get all User", "data": users})
 
 
 if __name__ == "__main__":

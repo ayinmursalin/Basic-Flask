@@ -1,8 +1,14 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_jwt_extended import JWTManager
 
 
 jwt = JWTManager()
+
+
+# Custom unauthorized callback
+@jwt.unauthorized_loader
+def custom_unauthorized_response(msg):
+    return jsonify({"message": "Unauthorized"}), 401
 
 
 def create_app():

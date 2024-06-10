@@ -1,4 +1,5 @@
 from app import create_app
+from utils import bcrypt
 
 app = create_app()
 
